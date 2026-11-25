@@ -2,10 +2,6 @@
 
 A working prototype for evaluating AI agent tool requests before sandbox execution.
 
-## Project timeline
-
-- **October 25, 2026:** Project start date, as provided by the project owner.
-- **November 25, 2026:** This GitHub repository was created and the current sandbox prototype was built and deployed.
 
 ## Current implementation
 
