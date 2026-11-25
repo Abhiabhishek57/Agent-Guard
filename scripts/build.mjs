@@ -1,0 +1,11 @@
+import { readFile, mkdir, writeFile, copyFile } from 'node:fs/promises';
+const root = new URL('../', import.meta.url);
+const read = path => readFile(new URL(path, root), 'utf8');
+const [policy, source, page] = await Promise.all([read('worker/policy.js'), read('worker/index.js'), read('ui.html')]);
+if (!page.includes('<title>') || !page.includes('/api/')) throw new Error('UI is missing title or API wiring.');
+const combined = policy.replace(/export /g, '') + '\n' + source.replace(/^import .*policy\.js';\r?\n/, '').replace("'__AGENTGUARD_UI__'", () => JSON.stringify(page));
+await mkdir(new URL('dist/server/', root), { recursive: true });
+await mkdir(new URL('dist/.openai/', root), { recursive: true });
+await writeFile(new URL('dist/server/index.js', root), combined);
+await copyFile(new URL('.openai/hosting.json', root), new URL('dist/.openai/hosting.json', root));
+console.log('Built AgentGuard Worker and embedded UI.');
